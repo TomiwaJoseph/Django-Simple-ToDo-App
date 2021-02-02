@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Todo
-from django.contrib import messages 
+from django.contrib import messages
 
 # Create your views here.
 def home(request):
@@ -25,11 +25,11 @@ def add(request):
 #     return redirect('home')
 
 
-# def update(request):
-#     edit = request.POST.get('task')
-#     cur_id = request.POST.get('id')
-#     to_do = get_object_or_404(Todo, id=cur_id)
-#     to_do.task = edit
-#     to_do.save()
-#     messages.success(request, 'Task updated successfully.')
-#     return redirect('home')
+def update(request):
+    updated_task = request.POST.get('task')
+    cur_id = request.POST.get('id')
+    to_do = get_object_or_404(Todo, id=cur_id)
+    to_do.task = updated_task
+    to_do.save()
+    messages.success(request, 'Task updated successfully.')
+    return redirect('home')
