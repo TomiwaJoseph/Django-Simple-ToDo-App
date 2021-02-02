@@ -18,11 +18,11 @@ def add(request):
     return redirect('home')
 
 
-# def delete(request, id):
-#     task = get_object_or_404(Todo, id=id)
-#     task.delete()
-#     messages.success(request, 'Task deleted successfully.')
-#     return redirect('home')
+def delete(request, id):
+    task = get_object_or_404(Todo, id=id)
+    task.delete()
+    messages.success(request, 'Task deleted successfully.')
+    return redirect('home')
 
 
 def update(request):
