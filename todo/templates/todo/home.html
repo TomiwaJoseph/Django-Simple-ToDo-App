@@ -1,0 +1,118 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'fontawesome-free/css/all.min.css' %}">
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/my_jQuery.js' %}"></script>
+    <title>Todo App</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="jumbotron text-center p-3 mt-5">
+            <h1>Simple ToDo App</h1>
+        </div>
+        <div class="jumbotron p-3">
+            <h2>Tasks
+                <button type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#mymodal">
+                    <i class="fa fa-plus"></i>
+                    Add Task
+                </button>
+            </h2>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissable" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                            <span aria-hidden="true">x</span>
+                        </button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <table class="table table-hover table-dark">
+                <tr>
+                    <th>Task</th>
+                    <th>Date Created</th>
+                    <th>Action</th>
+                </tr>
+                {% for task in to_do %}
+                    <tr>
+                        <td>{{ task.task }}</td>
+                        <td>{{ task.date_created }}</td>
+                        <td>
+                            <a href="{% url 'update' %}" class="btn btn-warning btn-sm" data-toggle='modal' data-target="#modaledit{{ task.id }}">Update</a>
+                            <a href="{% url 'delete' task.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        
+        <!-- Modal Edit Employee -->
+    {% for task in to_do %}
+        <div id="modaledit{{ task.id }}" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Update Information</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/update/" method="POST">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label>Task:</label>
+                                <input type="hidden" value="{{task.id}}" name="id">
+                                <input type="text" class="form-control" name="task" value="{{ task.task }}">
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-primary" type="submit">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+        <!-- Modal Add Employee-->
+
+        <div id="mymodal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Add Task</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/add/" method="POST">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label>Task:</label>
+                                <input type="text" class="form-control" name="task" required>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-primary" type="submit">Add Task</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/my_jQuery.js' %}"></script>
+</body>
+
+</html>
