@@ -33,3 +33,4 @@ def update(request):
     to_do.save()
     messages.success(request, 'Task updated successfully.')
     return redirect('home')
+
